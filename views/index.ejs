@@ -73,19 +73,19 @@
                 </form>
             </div>
         </div>
-        <div class="container-fluid">
-           
-                <!-- table to display data of students -->
-                <% if(data) { %>
+        <div class="container-fluid position-relative">
 
-                    <table class="table table-bordered">
+            <!-- table to display data of students -->
+            <% if(data) { %>
+                <div class="container overflow-scroll">
+                    <table class="table table-bordered ">
                         <thead class="table-dark">
                             <tr class=" ">
                                 <th>name</th>
                                 <th>phone</th>
                                 <th>email</th>
                                 <th>dob</th>
-                                <th>address</th>   
+                                <th>address</th>
                                 <th>education</th>
                                 <th>stream</th>
                                 <th>course_instrested</th>
@@ -95,7 +95,6 @@
                                 <th>admission</th>
                                 <th>admissionDate</th>
                                 <th>entrance_percentages</th>
-                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -116,7 +115,7 @@
                                     <td>
                                         <%= student.address %>
                                     </td>
-                                
+
                                     <td>
                                         <%= student.education %>
                                     </td>
@@ -144,22 +143,149 @@
                                     <td>
                                         <%= student.entrance_percentages %>
                                     </td>
-                                    <td class="d-flex gap-2">
-                                        <button class="btn btn-primary">Edit</button>
-                                        <button class="btn btn-danger">Delete</button>
+
+                                    <td class="border-0 d-flex flex-column gap-2 position-absolute end-0">
+
+                                        <button class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#Editstudent<%=student._id%>">Edit</button>
+
+                                        <form id="delete-student-form" action="/student/delete/<%= student._id%>"
+                                            method="post">
+                                            <button class="btn btn-danger">Delete</button>
+                                        </form>
                                     </td>
+                                    <!-- modal -->
+                                    <div class="modal fade" id="Editstudent<%= student._id %>" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form id="edit-student-form" action="/student/Edit/<%= student._id %>"
+                                                    method="post" >
+                                                    <div class="modal-header">
+                                                        <div class="">
+                                                            <h5 class="modal-title">Edit student Name : <%= student.name
+                                                                    %>
+                                                            </h5>
+                                                            <h5 class="modal-title ">Edit student id : <%= student._id
+                                                                    %>
+                                                            </h5>
+                                                        </div>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+
+                                                        <div class="d-flex flex-column gap-2 ">
+                                                            <div class="">
+                                                                <label for="">Name:-</label>
+                                                                <input class="form-control" type="text" name="name"
+                                                                    placeholder="Enter The New Name"
+                                                                    value="<%= student.name %>">
+                                                            </div>
+                                                            <div class="d-flex ">
+                                                                <div class="flex-grow-1">
+                                                                    <label for="">DOB:-</label>
+                                                                    <input type="date" class="form-control"
+                                                                        id="student-form-date" name="dob"
+                                                                        placeholder="2000-01-01"
+                                                                        value="<%= student.dob %>">
+                                                                </div>
+
+                                                                <div class="flex-grow-1 px-2">
+                                                                    <label for="">Prev Education:-</label>
+                                                                    <select class="form-select" name="education" id="">
+                                                                        <option value="">Privious Education</option>
+                                                                        <option value="10th">10<sup>th</sup></option>
+                                                                        <option value="10+2">10+2</option>
+                                                                        <option value="diploma">Diploma</option>
+                                                                        <option value="under gradution">Under Gradution
+                                                                        </option>
+                                                                        <option value="post gradution">Post Gradution
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex ">
+                                                            <div class="flex-grow-1">
+                                                                <label for="">Address:-</label>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Enter The New address" name="address"
+                                                                    value="<%= student.address %>">
+                                                            </div>
+                                                            <div class="flex-grow-1 px-2">
+                                                                <label for="">Stream:-</label>
+                                                                <select class="form-select" name="stream">
+                                                                    <option value="">Stream</option>
+                                                                    <option value="Btech">Btech</option>
+                                                                    <option value="BCA">BCA</option>
+                                                                    <option value="BCCA">BCCA</option>
+                                                                    <option value="MTech">MTech</option>
+                                                                    <option value="MCA">MCA</option>
+                                                                    <option value="MBA">MBA</option>
+                                                                </select>
+
+                                                            </div>
+                                                        </div>
+                                                        <div
+                                                            class="d-flex justify-content-center align-items-center gap-5 py-2">
+                                                            <div class="">
+                                                                <label for="">Instrested:-</label>
+                                                                <input type="checkbox" name="instrested" id="">
+                                                            </div>
+                                                            <div class="d-flex gap-2 align-items-center">
+                                                                <label for="">Addmission:-</label>
+                                                                <select class="form-select" id="" name="admission">
+                                                                    <option value="false">false</option>
+                                                                    <option value="true">true</option>
+                                                                </select>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="d-flex align-items-center gap-3">
+                                                            <div class="flex-grow-0">
+                                                                <label for="">Addmission
+                                                                    Date:-</label>
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                <input type="date" class="form-control"
+                                                                    name="admissionDate">
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary confirmAction" id="">Save
+                                                            changes</button>
+                                                    </div>
+                                                    
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </tr>
 
                                 <% }) %>
                         </tbody>
                     </table>
+                </div>
+                <% } else { %>
 
-                    <% } else { %>
+                    <p class="text-center fw-bolder">No Data found</p>
 
-                        <p class="text-center fw-bolder">No Date found</p>
+                    <% } %>
+ 
 
-                        <% } %>
-            
         </div>
+       
+        
     </section>
+
+    <script>
+        let fetchedMessage = <%- JSON.stringify(message) %>
+    </script>
+
+   
     <%- include("./partials/Footers.ejs")%>

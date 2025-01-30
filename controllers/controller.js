@@ -33,6 +33,7 @@ let getHome = async (req, res) => {
 async function fetchStudentsData() {
     try {
         let result = await studentModel.find()
+
         if (result.length != 0) {
             return result
         } else {
@@ -76,7 +77,7 @@ let getPost = async (req, res) => {
 
                 await studentEntry.save()
 
-                setStatusMessage(false)
+                setStatusMessage("Entry Added Successfully !")
 
                 res.status(202).redirect("/")
             } else {
@@ -98,4 +99,59 @@ let getPost = async (req, res) => {
 
 }
 
-export { getHome, getPost }
+let deleteStudent = async (req, res) => {
+    console.log("delete methods called")
+    console.log(req.params.id)
+
+    let delete_id = req.params.id
+
+    try {
+        let result = await studentModel.deleteOne({ _id: delete_id })
+
+        console.log(result)
+
+        setStatusMessage("student deleted successfully")
+
+        res.status(200).redirect("/")
+
+    } catch (err) {
+        console.log("unable to delete the student", err)
+
+        setStatusMessage("unable to delete the selected student")
+
+        res.status(400).redirect("/")
+    }
+}
+let editStudent = async (req, res) => {
+
+    console.log("student edit route called")
+
+    let editId = req.params.id
+
+    let editData = req.body
+
+    console.log(editData)
+
+    let { name, dob, education, address, stream, intrested, admission, admissionDate } = editData
+
+    intrested = Boolean(intrested)
+
+    try {
+
+        let result = await studentModel.updateOne({ _id: editId }, { $set: { name: name, dob: dob, education: education, address: address, stream: stream, intrested: intrested, admission: admission, admissionDate: admissionDate } })
+
+        console.log("edit was successful ", result)
+
+        setStatusMessage("student edited successfully !")
+
+        res.status(200).redirect("/")
+
+    } catch (err) {
+        console.log("unable to edit the student")
+        console.log(err)
+        setStatusMessage("unable to edit the student")
+        res.status(400).redirect("/")
+    }
+}
+
+export { getHome, getPost, deleteStudent, editStudent }
